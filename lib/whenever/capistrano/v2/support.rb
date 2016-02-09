@@ -22,6 +22,22 @@ module Whenever
           end
         end
 
+        def whenever_user_flag
+          if user = fetch(:whenever_user)
+            "--user #{user}"
+          end
+        end
+
+        def whenever_output_flag
+          if output = fetch(:whenever_output)
+            "--output '#{output}'"
+          end
+        end
+
+        def whenever_flags(*flags)
+          flags.compact.join(' ')
+        end
+
         def whenever_prepare_for_rollback args
           if fetch(:previous_release)
             # rollback to the previous release's crontab

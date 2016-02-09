@@ -17,7 +17,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :update_crontab do
       args = {
         :command => fetch(:whenever_command),
-        :flags   => fetch(:whenever_update_flags),
+        :flags   => whenever_flags(fetch(:whenever_update_flags), whenever_user_flag, whenever_output_flag),
         :path    => fetch(:latest_release)
       }
 
@@ -37,7 +37,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       if whenever_servers.any?
         args = {
           :command => fetch(:whenever_command),
-          :flags   => fetch(:whenever_clear_flags),
+          :flags   => whenever_flags(fetch(:whenever_clear_flags), whenever_user_flag, whenever_output_flag),
           :path    => fetch(:latest_release)
         }
 

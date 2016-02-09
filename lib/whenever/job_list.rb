@@ -12,6 +12,7 @@ module Whenever
       pre_set(options[:set])
 
       @roles = options[:roles] || []
+      @output = options[:output]
 
       setup_file = File.expand_path('../setup.rb', __FILE__)
       setup = File.read(setup_file)
@@ -53,7 +54,7 @@ module Whenever
           # :cron_log was an old option for output redirection, it remains for backwards compatibility
           options[:output] = (options[:cron_log] || @cron_log) if defined?(@cron_log) || options.has_key?(:cron_log)
           # :output is the newer, more flexible option.
-          options[:output] = @output if defined?(@output) && !options.has_key?(:output)
+          options[:output] = @output if @output && !options.has_key?(:output)
 
           @jobs[@current_time_scope] ||= []
           @jobs[@current_time_scope] << Whenever::Job.new(@options.merge(@set_variables).merge(options))

@@ -328,4 +328,37 @@ EXISTING_CRON
 
     assert_equal existing, @command.send(:prepare, existing)
   end
+
+end
+
+class CommandLineWithOutput < Whenever::TestCase
+
+  setup do
+    # File.stubs(:exists?).with('config/schedule.rb').returns(true)
+    # Whenever.stubs(:bin_rails?).returns(false)
+    # Whenever.stubs(:script_rails?).returns(false)
+
+    file = Tempfile.new("command_line_output")
+    content = <<-EOF
+      every 2.hours do
+        command '/my/command'
+      end
+EOF
+    file << content
+    file.rewind
+
+    @command = Whenever::CommandLine.new(:update => true, :identifier => 'My identifier', :output => "logger -t whenever_cron", :file => file.path)
+  end
+
+  should "" do
+    output = <<-EXPECTED
+# Begin Whenever generated tasks for: My identifier
+#{two_hours} /bin/bash -l -c '/my/command >> logger -t whenever_cron 2>&1'
+
+
+# End Whenever generated tasks for: My identifier
+EXPECTED
+    assert_equal output, @command.send(:whenever_cron)
+  end
+
 end

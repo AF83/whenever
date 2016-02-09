@@ -37,6 +37,20 @@ class CapistranoSupportTest < CapistranoTestCase
     assert_equal [:server1, :server2], @capistrano.whenever_servers
   end
 
+  should "return an empty string from #whenever_user_flag with no defined :whenever_user" do
+    @capistrano.expects(:fetch).with(:whenever_user)
+    assert_equal '', @capistrano.whenever_user_flag
+  end
+
+  should "return an --user flag from #whenever_user_flag with defined :whenever_user" do
+    @capistrano.stubs(:fetch).with(:whenever_user).returns("test")
+    assert_equal '--user test', @capistrano.whenever_user_flag
+  end
+
+  should "concat given flags from #whenever_flags" do
+    assert_equal 'flag1 flag2 flag3', @capistrano.whenever_flags('flag1', 'flag2', nil, 'flag3')
+  end
+
   should "#whenever_prepare_for_rollback: set path to previous_release if there is a previous release" do
     args = {}
     @capistrano.stubs(:fetch).with(:previous_release).returns("/some/path/20121221010000")

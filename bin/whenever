@@ -35,6 +35,9 @@ OptionParser.new do |opts|
   opts.on('-r', '--roles [role1,role2]', 'Comma-separated list of server roles to generate cron jobs for') do |roles|
     options[:roles] = roles.split(',').map(&:to_sym) if roles
   end
+  opts.on('-o', '--output [output]', 'Default output configuration') do |output|
+    options[:output] = output if output
+  end
   opts.on('-v', '--version') { puts "Whenever v#{Whenever::VERSION}"; exit(0) }
 end.parse!
 
