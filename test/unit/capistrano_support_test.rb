@@ -39,7 +39,7 @@ class CapistranoSupportTest < CapistranoTestCase
 
   should "return an empty string from #whenever_user_flag with no defined :whenever_user" do
     @capistrano.expects(:fetch).with(:whenever_user)
-    assert_equal '', @capistrano.whenever_user_flag
+    assert_equal nil, @capistrano.whenever_user_flag
   end
 
   should "return an --user flag from #whenever_user_flag with defined :whenever_user" do
