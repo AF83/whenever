@@ -1,11 +1,15 @@
 namespace :whenever do
   def setup_whenever_task(*args, &block)
     args = Array(fetch(:whenever_command)) + args
-    args += ['--user', user ] if user = fetch(:whenever_user)
+    if user = fetch(:whenever_user)
+      args += ['--user', user ]
+    end
 
     on roles fetch(:whenever_roles) do |host|
       args_for_host = block_given? ? args + Array(yield(host)) : args
-      args += ["--output", output] if output = fetch(:whenever_output)
+      if output = fetch(:whenever_output)
+        args += ["--output", output]
+      end
       within release_path do
         with fetch(:whenever_command_environment_variables) do
           execute *args_for_host
