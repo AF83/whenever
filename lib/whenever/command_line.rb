@@ -28,6 +28,10 @@ module Whenever
         exit(1)
       end
       @options[:cut] = @options[:cut].to_i
+
+      if (output = @options[:output]).to_s.include?("|")
+        @options[:output] = lambda { output }
+      end
     end
 
     def run

@@ -347,13 +347,13 @@ EOF
     file << content
     file.rewind
 
-    @command = Whenever::CommandLine.new(:update => true, :identifier => 'My identifier', :output => "logger -t whenever_cron", :file => file.path)
+    @command = Whenever::CommandLine.new(:update => true, :identifier => 'My identifier', :output => "2>&1 | logger -t whenever_cron", :file => file.path)
   end
 
   should "" do
     output = <<-EXPECTED
 # Begin Whenever generated tasks for: My identifier
-#{two_hours} /bin/bash -l -c '/my/command >> logger -t whenever_cron 2>&1'
+#{two_hours} /bin/bash -l -c '/my/command 2>&1 | logger -t whenever_cron'
 
 
 # End Whenever generated tasks for: My identifier
