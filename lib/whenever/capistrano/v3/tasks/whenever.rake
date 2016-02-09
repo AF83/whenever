@@ -4,12 +4,12 @@ namespace :whenever do
     if user = fetch(:whenever_user)
       args += ['--user', user ]
     end
+    if output = fetch(:whenever_output)
+      args += ["--output", "'#{output}'"]
+    end
 
     on roles fetch(:whenever_roles) do |host|
       args_for_host = block_given? ? args + Array(yield(host)) : args
-      if output = fetch(:whenever_output)
-        args += ["--output", output]
-      end
       within release_path do
         with fetch(:whenever_command_environment_variables) do
           execute *args_for_host
